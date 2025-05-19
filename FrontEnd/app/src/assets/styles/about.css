@@ -1,0 +1,45 @@
+.container-about {
+
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+    align-items: center;
+
+    img {
+        width: 40%;
+        object-fit: cover;
+    }
+
+    .container-content {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+
+        h2 {
+            margin-bottom: 25px;
+
+        }
+
+        .content-text {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        
+    }
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+        gap: 25px;
+
+        img{
+            width:60%;
+        }
+        
+        h2{
+            text-align: center;
+        }
+    }
+}

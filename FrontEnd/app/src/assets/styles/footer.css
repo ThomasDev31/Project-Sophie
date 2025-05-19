@@ -1,0 +1,24 @@
+.copyright {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+
+    a {
+        float: right;
+        color: #1D6154;
+        text-decoration: none;
+
+    }
+
+    @media screen and (max-width:768px) {
+        padding-left: 5%;
+        padding-right: 5%;
+        text-align: center;
+        a{
+            float: none;
+            
+        }
+    }
+}

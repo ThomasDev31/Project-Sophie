@@ -1,0 +1,11 @@
+.login {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    height: 66vh; /* a modifié pour page = 100vh-header-footer-margins */
+    h1 {
+        font-size: 2rem;
+    }
+}

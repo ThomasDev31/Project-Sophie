@@ -1,0 +1,13 @@
+*{
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Work Sans';
+}
+h1, h2, h3, h4, h5, h6, .container-categories {
+  font-family: 'Syne';
+}
+h1,h2,h3 {
+  color:#1D6154;
+}
