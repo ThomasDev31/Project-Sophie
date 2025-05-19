@@ -25,6 +25,25 @@ function Works() {
 		}
 	};
 
+	const deleteWorks = async (id) => {
+		try {
+			const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(response.status);
+			}
+			// const data = await response.json();
+			setWorks((prevWorks) => prevWorks.filter((work) => work.id !== id));
+		} catch (err) {
+			setError(err.message);
+		}
+	}
+
 	const fetchCategories = async () => {
 		try {
 			const response = await fetch("http://localhost:5678/api/categories");
