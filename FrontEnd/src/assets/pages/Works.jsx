@@ -52,7 +52,7 @@ function Works() {
         }
     };
 
-<<<<<<< Updated upstream
+
 	const addWork = async (work) => {
 		try {
 			const response = await fetch(`http://localhost:5678/api/works`, {
@@ -72,14 +72,6 @@ function Works() {
 		}
 	}
 
-	const fetchCategories = async () => {
-		try {
-			const response = await fetch("http://localhost:5678/api/categories");
-			if (!response.ok) {
-				throw new Error(response.status);
-			}
-			const data = await response.json();
-=======
     const fetchCategories = async () => {
         try {
             const response = await fetch(
@@ -89,7 +81,7 @@ function Works() {
                 throw new Error(response.status);
             }
             const data = await response.json();
->>>>>>> Stashed changes
+
 
             setCategories(data);
         } catch (err) {
