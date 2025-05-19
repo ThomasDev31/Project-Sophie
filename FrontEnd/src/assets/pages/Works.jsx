@@ -10,6 +10,7 @@ function Works() {
 	const [error, setError] = useState("");
 	const [isLoading, setisLoading] = useState(true);
 	const [categories, setCategories] = useState([]);
+	const [open, setOpen] = useState(false);
 
 	const fetchWorks = async () => {
 		try {
@@ -25,7 +26,7 @@ function Works() {
 			setisLoading(false);
 		}
 	};
-
+	
 	const fetchCategories = async () => {
 		try {
 			const response = await fetch("http://localhost:5678/api/categories");
@@ -73,7 +74,11 @@ function Works() {
 			{!error && !isLoading && (
 				<div className="container-global">
 					<About />
+					<div className="modify">
 					<h2>Mes projets</h2>
+					<button onClick={() => setOpen(!open)}><i className="fa-solid fa-pen-to-square" ></i></button>
+
+					</div>
 					<div className="container-categories">
 						<ul>
 							<li>
@@ -95,6 +100,22 @@ function Works() {
 								<p>{work.title}</p>
 							</div>
 						))}
+					</div>
+					<div className={`modal ${open ? "open" : ""}`}>
+						<div className="content-modal">
+							<button onClick={() => setOpen(!open)}>X</button>
+							{works.map((work) => (
+							<div className="container-work" key={work.id}>
+								<img src={work.imageUrl} alt={work.title} />
+								<div >
+									<p>{work.title}</p>
+									<i class="fa-solid fa-trash"></i>
+								</div>
+								
+							</div>
+							))}
+						</div>
+
 					</div>
 					<Contact />
 				</div>
