@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../layout/AuthContext";
+
 import "../styles/Login.css";
 import "../styles/contact.css";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { login } = useContext(AuthContext)
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            navigate("/");
+            navigate("/works");
         }
     }, []);
 
@@ -31,7 +34,7 @@ function Login() {
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem("token", data.token);
+                login(data.token);
                 navigate("/");
             } else {
                 alert("Email ou mot de passe incorrect");

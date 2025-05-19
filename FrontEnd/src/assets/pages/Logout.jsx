@@ -1,20 +1,17 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-
+import { AuthContext } from "../layout/AuthContext";
 function Logout({interval = 3000}) {
-   const navigate = useNavigate();
-
-    const logoutUser = () => {
-      localStorage.clear();
-    }
+    const navigate = useNavigate();
+    const {logout} = useContext(AuthContext);
+  
     useEffect(() => {
-      logoutUser();
-      setInterval(() => {
-        navigate("/");
-
+      logout();
+     const timeout =  setTimeout(() => {
+        navigate("/works")
       }, interval);
-      return clearInterval(setInterval);
-    })
+      return  () => clearTimeout(timeout);
+    },[logout, navigate, interval])
   return (
     <>
       <div>
