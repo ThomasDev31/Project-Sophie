@@ -11,3 +11,7 @@ h1, h2, h3, h4, h5, h6, .container-categories {
 h1,h2,h3 {
   color:#1D6154;
 }
+
+#root{
+  position: relative;
+}
