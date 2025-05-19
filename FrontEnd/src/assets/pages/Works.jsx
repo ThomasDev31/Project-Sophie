@@ -6,6 +6,7 @@ import "../styles/works.css";
 
 function Works() {
 	const [works, setWorks] = useState([]);
+	const [worksDisplayed, setWorksDisplayed] = useState([]);
 	const [error, setError] = useState("");
 	const [isLoading, setisLoading] = useState(true);
 	const [categories, setCategories] = useState([]);
@@ -44,7 +45,18 @@ function Works() {
 	useEffect(() => {
 		fetchWorks();
 		fetchCategories();
+        filterCats('');
 	}, []);
+
+	const filterCats = (filtername) => {
+		if (filtername === "") {
+
+			setWorksDisplayed(works);
+		} else {
+            const tamere = works.filter((work) => work.category.name === filtername);
+			setWorksDisplayed(tamere);
+		}
+	};
 
 	return (
 		<>
@@ -65,17 +77,19 @@ function Works() {
 					<div className="container-categories">
 						<ul>
 							<li>
-								<button className="category_button" >Tous</button>
+								<button className="category_button" onClick={(e) => filterCats(e.target.value)}>
+									Tous
+								</button>
 							</li>
 							{categories.map((categorie) => (
 								<li key={categorie.id}>
-									<button className="category_button" >{categorie.name}</button>
+									<button className="category_button" onClick={(e) => filterCats(categorie.name)}>{categorie.name}</button>
 								</li>
 							))}
 						</ul>
 					</div>
 					<div className="container-works">
-						{works.map((work) => (
+						{worksDisplayed.map((work) => (
 							<div className="container-work" key={work.id}>
 								<img src={work.imageUrl} alt={work.title} />
 								<p>{work.title}</p>
