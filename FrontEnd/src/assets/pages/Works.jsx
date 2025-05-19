@@ -83,10 +83,11 @@ function Works() {
 		console.log("Category :", category);
 
         const formData = new FormData();
+	
         formData.append("image", image);
         formData.append("title", title);
         formData.append("category", parseInt(category, 10));
-
+	console.log(formData)
         await addWork(formData);
         setTitle("");
         setImage(null);
@@ -273,6 +274,7 @@ function Works() {
                                             setCategory(e.target.value)
                                         }
                                     >
+										<option value="0">....</option>
                                         {categories.map((categorie) => (
                                             <option
                                                 key={categorie.id}
