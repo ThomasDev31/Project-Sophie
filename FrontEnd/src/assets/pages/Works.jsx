@@ -46,6 +46,25 @@ function Works() {
 		}
 	}
 
+	const addWork = async (work) => {
+		try {
+			const response = await fetch(`http://localhost:5678/api/works`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+				},
+				body: JSON.stringify(work)
+			});
+			if (!response.ok) {
+				throw new Error(response.status);
+			}
+			fetchWorks();
+		} catch (err) {
+			setError(err.message);
+		}
+	}
+
 	const fetchCategories = async () => {
 		try {
 			const response = await fetch("http://localhost:5678/api/categories");
