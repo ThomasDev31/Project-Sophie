@@ -25,7 +25,7 @@ function Works() {
 		}
 	};
 
-	const deleteWorks = async (id) => {
+	const deleteWork = async (id) => {
 		try {
 			const response = await fetch(`http://localhost:5678/api/works/${id}`, {
 				method: "DELETE",
