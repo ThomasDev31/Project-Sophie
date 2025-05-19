@@ -7,12 +7,17 @@ import "../styles/works.css";
 function Works() {
     const [works, setWorks] = useState([]);
     const [worksDisplayed, setWorksDisplayed] = useState([]);
+
+    const [title, setTitle] = useState("");
+    const [image, setImage] = useState(null);
+    const [category, setCategory] = useState("");
+
     const [error, setError] = useState("");
     const [isLoading, setisLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const [open, setOpen] = useState(false);
     const { token } = useContext(AuthContext);
-	const [step, setStep] = useState(1);
+    const [step, setStep] = useState(1);
     const fetchWorks = async () => {
         try {
             const response = await fetch("http://localhost:5678/api/works");
@@ -53,45 +58,41 @@ function Works() {
         }
     };
 
+    const addWork = async (FormData) => {
+        try {
+            const response = await fetch(`http://localhost:5678/api/works`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: FormData,
+            });
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            fetchWorks();
+        } catch (err) {
+            setError(err.message);
+        }
+    };
 
-	const addWork = async (FormData) => {
-		try {
-			let image = FormData.get('imageUrl');
-			const title = FormData.get('title');
-			const category = FormData.get('category');
-			
-			const reader = new FileReader();
-					reader.onload = () => {
-						reader.result
-			// 			const base64String = reader.result
-			// 				.replace('data:', '')
-			// 				.replace(/^.+,/, '');
+    const handleSubmit = async (e) => {
+		e.preventDefault();
+		console.log("Image :", image);
+		console.log("Title :", title);
+		console.log("Category :", category);
 
-			// 			console.log(base64String);
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("title", title);
+        formData.append("category", parseInt(category, 10));
 
-					};
-        	const imageUrl = reader.readAsDataURL(image);
-					console.log(imageUrl)
-			const work ={image, title, category}
-			
-
-
-			const response = await fetch(`http://localhost:5678/api/works`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-				},
-				body: JSON.stringify(work)
-			});
-			if (!response.ok) {
-				throw new Error(response.status);
-			}
-			fetchWorks();
-		} catch (err) {
-			setError(err.message);
-		}
-	}
+        await addWork(formData);
+        setTitle("");
+        setImage(null);
+        setCategory("");
+        setStep(1);
+    };
 
     const fetchCategories = async () => {
         try {
@@ -102,7 +103,6 @@ function Works() {
                 throw new Error(response.status);
             }
             const data = await response.json();
-
 
             setCategories(data);
         } catch (err) {
@@ -192,69 +192,102 @@ function Works() {
                         <Contact />
                     </div>
 
-					{step ===  1 &&(
-						<div className={`modal ${open ? "open" : ""}`}>
-                        <div className="content-modal">
-							<h2>Galerie Photos</h2>
-                            <button
-                                className="btn-closed"
-                                onClick={() => setOpen(!open)}
-                            >
-                                X
-                            </button>
-                            <div className="div-work">
-                                {works.map((work) => (
-                                    <div
-                                        className="container-work"
-                                        key={work.id}
-                                    >
-                                        <div>
-                                            <img
-                                                src={work.imageUrl}
-                                                alt={work.title}
-                                            />
-                                            <i
-                                                className="fa-solid fa-trash"
-                                                onClick={() =>
-                                                    deleteWork(work.id)
-                                                }
-                                            ></i>
+                    {step === 1 && (
+                        <div className={`modal ${open ? "open" : ""}`}>
+                            <div className="content-modal">
+                                <h2>Galerie Photos</h2>
+                                <button
+                                    className="btn-closed"
+                                    onClick={() => setOpen(!open)}
+                                >
+                                    X
+                                </button>
+                                <div className="div-work">
+                                    {works.map((work) => (
+                                        <div
+                                            className="container-work"
+                                            key={work.id}
+                                        >
+                                            <div>
+                                                <img
+                                                    src={work.imageUrl}
+                                                    alt={work.title}
+                                                />
+                                                <i
+                                                    className="fa-solid fa-trash"
+                                                    onClick={() =>
+                                                        deleteWork(work.id)
+                                                    }
+                                                ></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
 
-                            <hr />
-                            <button className="adding-element" onClick={() => setStep(2)}>
-                                Ajouter un élément
-                            </button>
+                                <hr />
+                                <button
+                                    className="adding-element"
+                                    onClick={() => setStep(2)}
+                                >
+                                    Ajouter un élément
+                                </button>
+                            </div>
                         </div>
-                    </div>
-					)}
-					{step === 2 && (
-						<div className={`modal ${open ? "open" : ""}`}>
-                        <div className="content-modal">
-							<h2>Galerie Photos</h2>
-							<button onClick={() => setStep(1)}>return</button>
-                            <button
-                                className="btn-closed"
-                                onClick={() => {setOpen(!open) 
-												setStep(1)}}>X</button>
-                          
-							<form action={addWork} >
-								<input type="file" name="imageUrl" />
-								<input type="text" name="title"  />
-								<select name="category" id="category">
-									{categories.map((categorie) => (
-										<option key={categorie.id} value={categorie.id} name="categoryId">{categorie.name}</option>
-									))}
-								</select>
-								<button type="submit">Envoyer</button>
-							</form>
+                    )}
+                    {step === 2 && (
+                        <div className={`modal ${open ? "open" : ""}`}>
+                            <div className="content-modal">
+                                <h2>Galerie Photos</h2>
+                                <button onClick={() => setStep(1)}>
+                                    return
+                                </button>
+                                <button
+                                    className="btn-closed"
+                                    onClick={() => {
+                                        setOpen(!open);
+                                        setStep(1);
+                                    }}
+                                >
+                                    X
+                                </button>
+
+                                <form onSubmit={handleSubmit}>
+                                    <input
+                                        type="file"
+                                        name="imageUrl"
+                                        onChange={(e) =>
+                                            setImage(e.target.files[0])
+                                        }
+                                    />
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        onChange={(e) =>
+                                            setTitle(e.target.value)
+                                        }
+                                    />
+                                    <select
+                                        name="category"
+                                        id="category"
+                                        onChange={(e) =>
+                                            setCategory(e.target.value)
+                                        }
+                                    >
+                                        {categories.map((categorie) => (
+                                            <option
+                                                key={categorie.id}
+                                                value={categorie.id}
+                                                name="categoryId"
+                                            >
+                                                {categorie.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <button type="submit">Envoyer</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-					)}
-                    
+                    )}
                 </>
             )}
         </>
