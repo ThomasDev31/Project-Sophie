@@ -12,6 +12,7 @@ function Works() {
     const [categories, setCategories] = useState([]);
     const [open, setOpen] = useState(false);
     const { token } = useContext(AuthContext);
+	const [step, setStep] = useState(1);
     const fetchWorks = async () => {
         try {
             const response = await fetch("http://localhost:5678/api/works");
@@ -53,8 +54,28 @@ function Works() {
     };
 
 
-	const addWork = async (work) => {
+	const addWork = async (FormData) => {
 		try {
+			let image = FormData.get('imageUrl');
+			const title = FormData.get('title');
+			const category = FormData.get('category');
+			
+			const reader = new FileReader();
+					reader.onload = () => {
+						reader.result
+			// 			const base64String = reader.result
+			// 				.replace('data:', '')
+			// 				.replace(/^.+,/, '');
+
+			// 			console.log(base64String);
+
+					};
+        	const imageUrl = reader.readAsDataURL(image);
+					console.log(imageUrl)
+			const work ={image, title, category}
+			
+
+
 			const response = await fetch(`http://localhost:5678/api/works`, {
 				method: "POST",
 				headers: {
@@ -170,7 +191,9 @@ function Works() {
 
                         <Contact />
                     </div>
-                    <div className={`modal ${open ? "open" : ""}`}>
+
+					{step ===  1 &&(
+						<div className={`modal ${open ? "open" : ""}`}>
                         <div className="content-modal">
 							<h2>Galerie Photos</h2>
                             <button
@@ -202,11 +225,36 @@ function Works() {
                             </div>
 
                             <hr />
-                            <button className="adding-element">
+                            <button className="adding-element" onClick={() => setStep(2)}>
                                 Ajouter un élément
                             </button>
                         </div>
                     </div>
+					)}
+					{step === 2 && (
+						<div className={`modal ${open ? "open" : ""}`}>
+                        <div className="content-modal">
+							<h2>Galerie Photos</h2>
+							<button onClick={() => setStep(1)}>return</button>
+                            <button
+                                className="btn-closed"
+                                onClick={() => {setOpen(!open) 
+												setStep(1)}}>X</button>
+                          
+							<form action={addWork} >
+								<input type="file" name="imageUrl" />
+								<input type="text" name="title"  />
+								<select name="category" id="category">
+									{categories.map((categorie) => (
+										<option key={categorie.id} value={categorie.id} name="categoryId">{categorie.name}</option>
+									))}
+								</select>
+								<button type="submit">Envoyer</button>
+							</form>
+                        </div>
+                    </div>
+					)}
+                    
                 </>
             )}
         </>
