@@ -16,34 +16,41 @@
 		align-items: center;
 		gap: 30px;
 
-		button {
+		.editing {
 			border: none;
 			background-color: transparent;
-			font-size: 1.5rem;
+			font-size: 1.3rem;
 			color: #1d6154;
 			cursor: pointer;
+			overflow-y: none;
+			
 		}
 	}
 
 	.modal {
 		position: absolute;
-		display:none;
+		display: none;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
 		width: 100%;
-		background-color: rgba(0,0,0,0.2);
-		button{
+		background-color: rgba(0, 0, 0, 0.2);
+
+		.btn-closed {
 			position: absolute;
-			top: 10px;
-			right:10px;	
+			top: 20px;
+			right: 20px;
+			padding: 5px;
 			cursor: pointer;
+			outline: none;
+			border-radius: 25px;
 		}
+
 		.content-modal {
 			width: 100%;
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
 			flex-wrap: wrap;
 			gap: 30px;
 			justify-content: center;
@@ -51,38 +58,67 @@
 			position: relative;
 			top: 30%;
 			left: 50%;
-			transform: translate(-50%,-50%);
+			transform: translate(-50%, -50%);
 			background-color: white;
 			padding: 20px;
-			.container-work {
-				width: 20%;
-
-				img {
-
-					width: 100%;
-					height: auto;
-					object-fit: cover;
-				}
-				div{
+			border-radius: 25px;
+			.div-work{
+				display: flex;
+				flex-wrap: wrap;
+				flex-direction: row;
+				gap: 30px;
+				.container-work {
+				width: 10%;
+				border-radius: 25px;
+				
+				div {
+					position: relative;
 					display: flex;
 					flex-wrap: wrap;
 					gap: 10px;
 					justify-content: center;
-					i{
-					overflow-y: hidden;
+
+					i {
+						position: absolute;
+						overflow-y: hidden;
+						top: 10px;
+						right: 10px;
+					}
+
+					img {
+
+						width: 100%;
+						height: auto;
+						object-fit: cover;
+					}
+					
 				}
-				}
-				
-				
+
+
 			}
+			}
+			.adding-element{
+				width: 50%;
+				padding: 5px;
+				font-size:1.2rem ;
+				font-weight: bold;
+				color: white;
+				background-color: #1d6154;
+				border: none;
+				border-radius:25px;
+				cursor: pointer;
+				margin: auto;
+			}
+			
 		}
-		
+
 
 	}
-	.modal.open{
-			display: block;
-		}
-	
+
+	.modal.open {
+		display: block;
+	}
+
 	.container-categories {
 		width: 100%;
 
@@ -132,11 +168,7 @@
 		transform: translate(-50%, -50%);
 		width: 0%;
 		height: 0%;
-<<<<<<< Updated upstream
 		background-color: #1d6154;
-=======
-		background-color:#1d6154 ;
->>>>>>> Stashed changes
 		z-index: -1;
 		transition: width 0.4s ease, height 0.4s ease;
 		border-radius: 50%;
@@ -148,7 +180,7 @@
 		width: 200%;
 		height: 500%;
 		border: 1px solid #1d6154;
-		border-radius: 25px;    
+		border-radius: 25px;
 	}
 
 	.category_button:hover {

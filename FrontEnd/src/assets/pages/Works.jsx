@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Contact from "./contact";
 import About from "./About";
-
+import { AuthContext } from "../layout/AuthContext";
 import "../styles/works.css";
 
 function Works() {
@@ -11,7 +11,7 @@ function Works() {
 	const [isLoading, setisLoading] = useState(true);
 	const [categories, setCategories] = useState([]);
 	const [open, setOpen] = useState(false);
-
+	const { token } = useContext(AuthContext)
 	const fetchWorks = async () => {
 		try {
 			const response = await fetch("http://localhost:5678/api/works");
@@ -20,6 +20,7 @@ function Works() {
 			}
 			const data = await response.json();
 			setWorks(data);
+			setWorksDisplayed(data);
 		} catch (err) {
 			setError(err.message);
 		} finally {
@@ -84,18 +85,18 @@ function Works() {
 	useEffect(() => {
 		fetchWorks();
 		fetchCategories();
-        filterCats('');
+        filterCats();
 	}, []);
 
 	const filterCats = (filtername) => {
 		if (filtername === "") {
-
 			setWorksDisplayed(works);
 		} else {
             const tamere = works.filter((work) => work.category.name === filtername);
 			setWorksDisplayed(tamere);
 		}
 	};
+	
 
 	return (
 		<>
@@ -114,19 +115,21 @@ function Works() {
 					<About />
 					<div className="modify">
 					<h2>Mes projets</h2>
-					<button onClick={() => setOpen(!open)}><i className="fa-solid fa-pen-to-square" ></i></button>
+					{token && (
+						<button className="editing" onClick={() => setOpen(!open)}><i className="fa-solid fa-pen-to-square" ></i></button>
 
+					)}
 					</div>
 					<div className="container-categories">
 						<ul>
 							<li>
-								<button className="category_button" onClick={(e) => filterCats(e.target.value)}>
+								<button className="category_button" onClick={() => filterCats('')}>
 									Tous
 								</button>
 							</li>
 							{categories.map((categorie) => (
 								<li key={categorie.id}>
-									<button className="category_button" onClick={(e) => filterCats(categorie.name)}>{categorie.name}</button>
+									<button className="category_button" onClick={() => filterCats(categorie.name)}>{categorie.name}</button>
 								</li>
 							))}
 						</ul>
@@ -141,17 +144,21 @@ function Works() {
 					</div>
 					<div className={`modal ${open ? "open" : ""}`}>
 						<div className="content-modal">
-							<button onClick={() => setOpen(!open)}>X</button>
-							{works.map((work) => (
-							<div className="container-work" key={work.id}>
-								<img src={work.imageUrl} alt={work.title} />
-								<div >
-									<p>{work.title}</p>
-									<i class="fa-solid fa-trash"></i>
+							<button className="btn-closed" onClick={() => setOpen(!open)}>X</button>
+							<div className="div-work">
+								{works.map((work) => (
+								<div className="container-work" key={work.id}>
+									<div >
+										<img src={work.imageUrl} alt={work.title} />
+										<i className="fa-solid fa-trash" onClick={() => deleteWork(work.id)}></i>
+									</div>
+									
 								</div>
-								
+								))}
 							</div>
-							))}
+							
+							<hr />
+							<button className="adding-element">Ajouter un élément</button>
 						</div>
 
 					</div>
