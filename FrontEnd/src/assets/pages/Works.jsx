@@ -7,17 +7,17 @@ import "../styles/works.css";
 function Works() {
     const [works, setWorks] = useState([]);
     const [worksDisplayed, setWorksDisplayed] = useState([]);
-
     const [title, setTitle] = useState("");
     const [image, setImage] = useState(null);
     const [category, setCategory] = useState("");
-
     const [error, setError] = useState("");
     const [isLoading, setisLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const [open, setOpen] = useState(false);
     const { token } = useContext(AuthContext);
     const [step, setStep] = useState(1);
+
+
     const fetchWorks = async () => {
         try {
             const response = await fetch("http://localhost:5678/api/works");
@@ -51,8 +51,9 @@ function Works() {
             if (!response.ok) {
                 throw new Error(response.status);
             }
-            // const data = await response.json();
-            setWorks((prevWorks) => prevWorks.filter((work) => work.id !== id));
+            
+			fetchWorks();
+            
         } catch (err) {
             setError(err.message);
         }
@@ -78,17 +79,14 @@ function Works() {
 
     const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log("Image :", image);
-		console.log("Title :", title);
-		console.log("Category :", category);
 
         const formData = new FormData();
-	
         formData.append("image", image);
         formData.append("title", title);
         formData.append("category", parseInt(category, 10));
-	console.log(formData)
+
         await addWork(formData);
+
         setTitle("");
         setImage(null);
         setCategory("");
@@ -151,7 +149,9 @@ function Works() {
                             {token && (
                                 <button
                                     className="editing"
-                                    onClick={() => setOpen(!open)}
+                                    onClick={() => {setOpen(!open)
+										
+									}}
                                 >
                                     <i className="fa-solid fa-pen-to-square"></i>
                                 </button>
@@ -199,7 +199,7 @@ function Works() {
                                 <h2>Galerie Photos</h2>
                                 <button
                                     className="btn-closed"
-                                    onClick={() => setOpen(!open)}
+                                    onClick={() => {setOpen(!open) }}
                                 >
                                     X
                                 </button>
